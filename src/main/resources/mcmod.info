@@ -1,0 +1,16 @@
+[
+{
+  "modid": "testmca",
+  "name": "Test MCA",
+  "description": "Example mod using the MCAnimator program.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Fir3will", "AXELPOLTINO"],
+  "credits": "Fir3will and AXELPOLTINO, for making this example MCA mod",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

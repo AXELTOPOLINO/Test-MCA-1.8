@@ -1,0 +1,157 @@
+package main.testmca.renders.models;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.vecmath.Vector3f;
+import main.testmca.TestMCA;
+import mca.library.client.MCAModelBox;
+import mca.library.client.MCAModelRenderer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.PositionTextureVertex;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemTransformVec3f;
+import net.minecraft.client.renderer.block.model.ModelBlock;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.client.resources.model.SimpleBakedModel.Builder;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.client.model.ISmartBlockModel;
+import net.minecraftforge.client.model.ISmartItemModel;
+import com.google.common.primitives.Ints;
+
+public class BakedTestTileModel implements IBakedModel, ISmartBlockModel, ISmartItemModel
+{
+	private static ModelTestTile model = new ModelTestTile();
+	private final TextureAtlasSprite base;
+	private final List<MCAModelRenderer> boxes;
+
+	public BakedTestTileModel()
+	{
+		base = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(TestMCA.MODID + ":models/Stuff");
+		boxes = new ArrayList<MCAModelRenderer>();
+		boxes.addAll(model.parts.values());
+	}
+
+	@Override
+	public IBakedModel handleItemState(ItemStack stack)
+	{
+		return new BakedTestTileModel();
+	}
+
+	@Override
+	public IBakedModel handleBlockState(IBlockState state)
+	{
+		return new Builder(ModelBlock.deserialize("{\n\t\"parent\": \"block/cube_all\",\n\t\"textures\": {\n\t\t\"all\": \"testmca:blocks/test_block\"\n}\n}")).setTexture(Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/slime")).makeBakedModel();
+	}
+
+	@Override
+	public List getFaceQuads(EnumFacing face)
+	{
+		return Collections.emptyList();
+	}
+
+	public int[] getVertex(float x, float y, float z, float u, float v)
+	{
+		return new int[] { Float.floatToRawIntBits(x), Float.floatToRawIntBits(y), Float.floatToRawIntBits(z), -1, Float.floatToRawIntBits(base.getInterpolatedU(u)), Float.floatToRawIntBits(base.getInterpolatedV(v)), 0 };
+	}
+
+	private List<BakedQuad> getQuads(float offsetX, float offsetY, float offsetZ, MCAModelBox box, EnumFacing face)
+	{
+		List<BakedQuad> list = new ArrayList<BakedQuad>();
+		int ord = face.ordinal();
+		int i = -1;
+		switch (ord)
+		{
+			case 0:
+				i = 3;
+				break;
+			case 1:
+				i = 2;
+				break;
+			case 2:
+				i = 4;
+				break;
+			case 3:
+				i = 5;
+				break;
+			case 4:
+				i = 0;
+				break;
+			case 5:
+				i = 1;
+				break;
+		}
+		PositionTextureVertex[] vs = box.getQuads()[i].vertexPositions;
+		int[] a = new int[0];
+		for (i = 0; i < 4; i++)
+		{
+			float x = (float) ((vs[i].vector3D.xCoord + offsetX) / 16.0F) + 0.5F;
+			float y = (float) ((vs[i].vector3D.yCoord + offsetY) / -16.0F) - 1.8F;
+			float z = (float) ((vs[i].vector3D.zCoord + offsetZ) / 16.0F) + 0.5F;
+			float u = vs[i].texturePositionX * 16;
+			float v = vs[i].texturePositionY * 16;
+			a = Ints.concat(a, getVertex(x, y, z, u, v));
+		}
+		list.add(new BakedQuad(a, -1, face));
+		return list;
+	}
+
+	@Override
+	public List getGeneralQuads()
+	{
+		List<BakedQuad> list = new ArrayList<BakedQuad>();
+		for (MCAModelRenderer box : boxes)
+		{
+			for (EnumFacing face : EnumFacing.VALUES)
+			{
+				for (Object o : box.cubeList)
+				{
+					MCAModelBox b = (MCAModelBox) o;
+					list.addAll(getQuads(box.rotationPointX + box.offsetX, box.rotationPointY + box.offsetY, box.rotationPointZ + box.offsetZ, b, face));
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public boolean isAmbientOcclusion()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isGui3d()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isBuiltInRenderer()
+	{
+		return false;
+	}
+
+	@Override
+	public TextureAtlasSprite getTexture()
+	{
+		return base;
+	}
+
+	@Override
+	public ItemCameraTransforms getItemCameraTransforms()
+	{
+		if (SCALED == null)
+		{
+			ItemTransformVec3f v = new ItemTransformVec3f(new Vector3f(10F, -45F, 170F), new Vector3f(0F, 0.075F, -0.1375F), new Vector3f(0.375F, 0.375F, 0.375F));
+			SCALED = new ItemCameraTransforms(v, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT);
+		}
+		return SCALED;
+	}
+
+	private static ItemCameraTransforms SCALED;
+}

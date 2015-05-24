@@ -1,0 +1,11 @@
+package main.testmca.renders;
+
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+
+public class TextureAtlazSprite extends TextureAtlasSprite
+{
+	public TextureAtlazSprite(String spriteName)
+	{
+		super(spriteName);
+	}
+}

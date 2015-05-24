@@ -1,0 +1,46 @@
+package main.testmca.blocks.states;
+
+import java.util.Collection;
+import com.google.common.collect.ImmutableMap;
+import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
+
+public class TestBlockState implements IBlockState
+{
+	@Override
+	public Collection getPropertyNames()
+	{
+		return null;
+	}
+
+	@Override
+	public Comparable getValue(IProperty property)
+	{
+		return null;
+	}
+
+	@Override
+	public IBlockState withProperty(IProperty property, Comparable value)
+	{
+		return null;
+	}
+
+	@Override
+	public IBlockState cycleProperty(IProperty property)
+	{
+		return null;
+	}
+
+	@Override
+	public ImmutableMap getProperties()
+	{
+		return null;
+	}
+
+	@Override
+	public Block getBlock()
+	{
+		return null;
+	}
+}

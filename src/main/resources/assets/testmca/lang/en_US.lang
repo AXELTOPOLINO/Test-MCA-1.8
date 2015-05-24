@@ -1,0 +1,8 @@
+# Blocks
+tile.testmca_test_block.name=Test Block
+
+# Items
+item.testmca_test_item.name=Test Item
+
+# Entities
+entity.test_entity.name=Test Entity

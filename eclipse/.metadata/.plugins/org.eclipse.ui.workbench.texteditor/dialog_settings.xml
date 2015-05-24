@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="263" key="DIALOG_WIDTH"/>
+		<item value="111" key="DIALOG_Y_ORIGIN"/>
+		<item value="1105" key="DIALOG_X_ORIGIN"/>
+		<item value="399" key="DIALOG_HEIGHT"/>
+		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="true" key="wrap"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="isRegEx"/>
+		<item value="false" key="incremental"/>
+		<item value="false" key="wholeword"/>
+		<item value="frb" key="selection"/>
+		<list key="findhistory">
+			<item value="PTV_front_right_bottom"/>
+			<item value="PTV_front_right_top"/>
+			<item value="PTV_front_left_top"/>
+			<item value="PTV_back_right_bottom"/>
+			<item value="PTV_front_left_bottom"/>
+			<item value="PTV_back_left_bottom"/>
+			<item value="PTV_back_left_top"/>
+			<item value="PTV_back_right_top"/>
+		</list>
+		<list key="replacehistory">
+			<item value="frb"/>
+			<item value="frt"/>
+			<item value="flt"/>
+			<item value="brb"/>
+			<item value="flb"/>
+			<item value="blb"/>
+			<item value="blt"/>
+			<item value="brt"/>
+		</list>
+	</section>
+</section>

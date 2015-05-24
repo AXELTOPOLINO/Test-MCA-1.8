@@ -1,0 +1,74 @@
+package main.testmca;
+
+import main.testmca.blocks.BlockTestBlock;
+import main.testmca.entities.EntityTestEntity;
+import main.testmca.items.ItemTestItem;
+import main.testmca.tiles.TileTestTile;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+
+@Mod(name = "Test MCA", modid = TestMCA.MODID, version = TestMCA.VERSION)
+public class TestMCA
+{
+	// References
+	public static final String MODID = "testmca";
+	public static final String VERSION = "1.0";
+	// Prerequisites
+	@Instance(MODID)
+	public static TestMCA instance;
+	@SidedProxy(serverSide = "main.testmca.MCACommon", clientSide = "main.testmca.MCAClient")
+	public static MCACommon proxy;
+	// Items
+	public static final ItemTestItem test_item = new ItemTestItem();
+	// Blocks
+	public static final BlockTestBlock test_block = new BlockTestBlock();
+	public ModelResourceLocation loc = new ModelResourceLocation(MODID + ":" + test_block.getName(), null);
+
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event)
+	{
+		MinecraftForge.EVENT_BUS.register(new TestEventHandler());
+	}
+
+	@EventHandler
+	public void init(FMLInitializationEvent event)
+	{
+		GameRegistry.registerTileEntity(TileTestTile.class, TileTestTile.class.getName());
+		int id = EntityRegistry.findGlobalUniqueEntityId();
+		EntityRegistry.instance();
+		EntityRegistry.registerGlobalEntityID(EntityTestEntity.class, "test_entity", id, 0xFFFF00, 0xB2B200);
+		EntityRegistry.instance();
+		EntityRegistry.registerModEntity(EntityTestEntity.class, "test_entity", id, this, 80, 3, true);
+
+		if (event.getSide() == Side.CLIENT)
+		{
+			RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+
+			renderItem.getItemModelMesher().register(Item.getItemFromBlock(test_block), new ItemMeshDefinition()
+			{
+				@Override
+				public ModelResourceLocation getModelLocation(ItemStack stack)
+				{
+					return loc;
+				}
+			});
+			renderItem.getItemModelMesher().register(test_item, 0, new ModelResourceLocation(MODID + ":" + test_item.getName(), "inventory"));
+		}
+
+		proxy.registerRenders();
+	}
+}
